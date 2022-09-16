@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">LatticeAirApp</string>
+    <string name="ideal_time_summary">Ideal time<![CDATA[ <5s ]]></string>
+    <string name="ideal_time_home">Ideal time<![CDATA[ <5s ]]></string>
+</resources>
