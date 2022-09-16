@@ -1,0 +1,88 @@
+swagger: "2.0"
+info:
+  title: Hospital API
+  description: The hospital api consist of basic API's to registre the patient and to get hospital details
+  version: 1.0
+  contact:
+    email: ssid23121@gmail.com
+  server:
+    url: "http://localhost:3000"
+    description: "DEVELOPMENT SERVER"
+    url: "https://hospital.in"
+    description: "PRODUCTION SERVER"
+
+schemes: [http, https]
+
+# securityDefinitions:
+  # BasicAuth:
+  #   type: basic
+  # JWT:
+  #   description:
+  #   type: apiKey
+  #   name: Authorization
+  #   in: header
+
+host: localhost:3000
+basePath: /api
+paths:
+  
+  /register: 
+    post:
+      summary: create user profile
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters: 
+        - in: body
+          name: user
+          schema:
+            type: object
+            properties:
+              uid: 
+                type: integer
+              username:
+                type: string
+              role:
+                type: string
+              pin:
+                type: number
+        
+      responses:
+        201:
+          description: User profile created
+          schema:
+            type: object
+            properties: 
+              status: 
+                type: integer
+              message:
+                type: string
+
+        442:
+          description: validation error
+          schema:
+            type: object
+            properties: 
+              status: 
+                type: integer
+              message:
+                type: string
+        500:
+          description: Internal server error
+          schema:
+            type: object
+            properties: 
+              status: 
+                type: integer
+              message:
+                type: string
+        404:
+          description: Not found
+          schema:
+            type: object
+            properties: 
+              status: 
+                type: integer
+              message:
+                type: string
