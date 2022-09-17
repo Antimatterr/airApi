@@ -24,17 +24,24 @@ const createProfile = {
     }
 
     try {
-      const result = await query(`insert into users(uid, username, role, pin) values(?, ?, ?, ?)`, [
-        req.body.uid,
-        req.body.username,
-        req.body.role,
-        req.body.pin,
-      ]);
 
-      return res.json({ status: 1, message: "profile created" });
+      const user = await query(`select uid from users WHERE uid = ${req.body.uid}`);
+      console.log(user.length)
+      if (!user.length) {
+        await query(`insert into users(uid, username, role, pin) values(?, ?, ?, ?)`, [
+          req.body.uid,
+          req.body.username,
+          req.body.role,
+          req.body.pin,
+        ]);
 
-    } catch (err) {
-      return res.status(409).json({ status: 0, message: 'duplicate entry' })
+        return res.status(201).json({ status: 1, message: "PROFILE_CREATED" });
+      }
+      else {
+        return res.status(409).json({ status: 0, message: "DUP_ENTRY" })
+      }
+    } catch (error) {
+      return res.status(500).json({ status: 0, message: error.code })
     }
 
   }
