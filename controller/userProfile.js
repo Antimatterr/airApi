@@ -75,7 +75,47 @@ const userProfile = {
 
 
 
+  },
+
+  async users(req, res, next) {
+    // let user_id = req.params.id;
+    // if (isNaN(user_id)) {
+    //   return res.status(400).json({ status: 0, message: "BAD_REQUEST" })
+    // }
+    try {
+      const result = await query(`select * from users where delete_status = 0`);
+      // console.log(result.length)
+      if (result.length) {
+        return res.status(200).json(result);
+      }
+      else {
+        return res.status(400).json({ status: 0, message: "NO_USER_FOUND" })
+      }
+    } catch (error) {
+      return res.status(500).json({ status: 0, message: error.code })
+    }
+  },
+
+  async user(req, res, next) {
+    let user_id = req.params.id;
+    if (isNaN(user_id)) {
+      return res.status(400).json({ status: 0, message: "BAD_REQUEST" })
+    }
+    try {
+      const result = await query(`select * from users where delete_status = 0 and uid=${user_id}`);
+      // console.log(result.length)
+      if (result.length) {
+        return res.status(200).json({ status: 1, result });
+      }
+      else {
+        return res.status(400).json({ status: 0, message: "NO_USER_FOUND" })
+      }
+    } catch (error) {
+      return res.status(500).json({ status: 0, message: error.code })
+    }
   }
+
+
 }
 
 export default userProfile;
