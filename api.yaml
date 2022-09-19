@@ -86,4 +86,58 @@ paths:
                 type: integer
               message:
                 type: string
+  /removeUser: 
+    post:
+      summary: remove user profile
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters: 
+        - in: body
+          name: user
+          schema:
+            type: object
+            properties:
+              uid: 
+                type: integer
         
+      responses:
+        201:
+          description: User profile removed
+          schema:
+            type: object
+            properties: 
+              status: 
+                type: integer
+              message:
+                type: string
+
+        422:
+          description: validation error
+          schema:
+            type: object
+            properties: 
+              status: 
+                type: integer
+              message:
+                type: string
+        409:
+          description: profile does not exist
+          schema:
+            type: object
+            properties:
+              status:
+                type: integer
+              message:
+                type: string
+        500:
+          description: Internal server error
+          schema:
+            type: object
+            properties: 
+              status: 
+                type: integer
+              message:
+                type: string
+
