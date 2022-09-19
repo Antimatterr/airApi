@@ -8,7 +8,7 @@ info:
   server:
     url: "http://localhost:5000"
     description: "DEVELOPMENT SERVER"
-    url: "https://157.245.100.190"
+    url: "http://157.245.100.190"
     description: "PRODUCTION SERVER"
 
 schemes: [http, https]
