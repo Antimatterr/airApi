@@ -7,5 +7,6 @@ const router = express.Router();
 
 
 router.post('/register', userProfile.register);
+router.post('/removeUser', userProfile.removeProfile);
 
 export default router

@@ -26,7 +26,7 @@ const userProfile = {
     try {
 
       const user = await query(`select uid from users WHERE uid = ${req.body.uid}`);
-      console.log(user.length)
+      // console.log(user.length)
       if (!user.length) {
         await query(`insert into users(uid, username, role, pin) values(?, ?, ?, ?)`, [
           req.body.uid,
@@ -44,8 +44,38 @@ const userProfile = {
       return res.status(500).json({ status: 0, message: error.code })
     }
 
-  }
+  },
 
+  async removeProfile(req, res, next) {
+    const removeSchema = Joi.object({
+      uid: Joi.number().required()
+    });
+
+    const { error } = removeSchema.validate();
+
+
+    if (error) {
+      return res.status(422).json({ status: 0, message: error.message })
+    }
+
+    try {
+
+      const user = await query(`select uid from users WHERE uid = ${req.body.uid}`);
+      // console.log(user.length)
+      if (user.length) {
+        await query(`update users set delete_status = 1 where uid = ${req.body.uid}`);
+        return res.status(201).json({ status: 1, message: "PROFILE_REMOVED" });
+      }
+      else {
+        return res.status(409).json({ status: 0, message: "PROFILE_NOT_EXIST" })
+      }
+    } catch (error) {
+      return res.status(500).json({ status: 0, message: error.code })
+    }
+
+
+
+  }
 }
 
-export default createProfile;
+export default userProfile;
