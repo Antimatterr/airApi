@@ -140,4 +140,117 @@ paths:
                 type: integer
               message:
                 type: string
+  /users: 
+    get:
+      summary: Get all users who are not removed
+      produces:
+        - application/json
+      responses:
+        200:
+          description: user details
+          schema: 
+            type: array
+            items: 
+              type: object
+              properties: 
+                uid:
+                  type: number
+                username:
+                  type: string
+                role: 
+                  type: string
+                pin:
+                  type: string
+                careated_at:
+                  type: string
+                updated_at: 
+                  type: string
+                
+                      
+        404:
+          description: No user found
+          schema:
+            type: object
+            properties: 
+              status: 
+                type: integer
+              message:
+                type: string
+        500:
+          description: Internal server error
+          schema:
+            type: object
+            properties: 
+              status: 
+                type: integer
+              message:
+                type: string
 
+  /users/{uid}:
+    get:
+      summary: return user data by uid
+      description: This provides details provided user id as parameter
+      parameters:
+        - in: path
+          name: uid
+          schema:
+            type: integer
+          required: true
+          description: The user id who's details are needed to be fetched 
+      responses:
+        200:
+          description: Hospital details
+          schema: 
+            type: object
+            properties:
+              status:
+                type: integer
+              result:
+                type: array
+                items: 
+                  type: object
+                  properties: 
+                    uid:
+                      type: number
+                    username:
+                      type: string
+                    role: 
+                     type: string
+                    pin:
+                      type: string
+                    careated_at:
+                      type: string
+                    updated_at: 
+                      type: string
+
+        404:
+          description: Not found
+          schema:
+            type: object
+            properties: 
+              status: 
+                type: integer
+              message:
+                type: string
+
+        400:
+          description: Bad request.userid must be an integer
+          schema:
+            type: object
+            properties: 
+              status: 
+                type: integer
+              message:
+                type: string
+        500:
+          description: Internal server error
+          schema:
+            type: object
+            properties: 
+              status: 
+                type: integer
+              message:
+                type: string
+
+
+    

@@ -79,7 +79,7 @@ const userProfile = {
       const user = await query(`select uid from users WHERE uid = ${req.body.uid}`);
       // console.log(user.length)
       if (user.length) {
-        /**
+        /** 
          * UPDATE THE DELETE STATUS OF THE PROFILE (SOFT DELETE).
          */
         await query(`update users set delete_status = 1 where uid = ${req.body.uid}`);
@@ -106,7 +106,7 @@ const userProfile = {
         return res.status(200).json(result);
       }
       else {
-        return res.status(400).json({ status: 0, message: "NO_USER_FOUND" })
+        return res.status(404).json({ status: 0, message: "NO_USER_FOUND" })
       }
     } catch (error) {
       return res.status(500).json({ status: 0, message: error.code })
@@ -129,7 +129,7 @@ const userProfile = {
         return res.status(200).json({ status: 1, result });
       }
       else {
-        return res.status(400).json({ status: 0, message: "NO_USER_FOUND" })
+        return res.status(404).json({ status: 0, message: "NO_USER_FOUND" })
       }
     } catch (error) {
       return res.status(500).json({ status: 0, message: error.code })
