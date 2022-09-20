@@ -1,5 +1,5 @@
 import express from "express";
-import { APP_PORT } from "./config";
+import { APP_PORT_LOCAL, APP_PORT_DEV, APP_ENV } from "./config";
 import pool from "./config/database";
 import routes from "./routes"
 
@@ -21,6 +21,7 @@ app.use(morgan('combined'));
 
 app.use('/api', routes);
 
-app.listen(APP_PORT, () => {
-  console.log(`server running on ${APP_PORT}`);
+const portNo = APP_ENV == "dev" ? APP_PORT_DEV : APP_PORT_LOCAL;
+app.listen(portNo, () => {
+  console.log(`server running on ${portNo}`);
 })
