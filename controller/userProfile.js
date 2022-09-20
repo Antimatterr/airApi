@@ -8,8 +8,14 @@ const query = util.promisify(pool.query).bind(pool);
 
 const userProfile = {
 
+  /*
+    TO CREATE USER PROFILE.
+  */
   async register(req, res, next) {
 
+    /*
+      user data validation using JOI 
+    */
     const profileSchema = Joi.object({
       uid: Joi.number().required(),
       username: Joi.string().min(3).max(50).required(),
@@ -24,10 +30,15 @@ const userProfile = {
     }
 
     try {
-
+      /*
+       CHECK WHETHER GIVEN USERID ALREADY EXISTS IN DATABASE OR NOT. 
+      */
       const user = await query(`select uid from users WHERE uid = ${req.body.uid}`);
       // console.log(user.length)
       if (!user.length) {
+        /* 
+          INSERT DATA TO THE USER TABLE
+        */
         await query(`insert into users(uid, username, role, pin) values(?, ?, ?, ?)`, [
           req.body.uid,
           req.body.username,
@@ -46,6 +57,9 @@ const userProfile = {
 
   },
 
+  /*
+    TO REMOVE USER PROFILE
+  */
   async removeProfile(req, res, next) {
     const removeSchema = Joi.object({
       uid: Joi.number().required()
@@ -59,10 +73,15 @@ const userProfile = {
     }
 
     try {
-
+      /**
+       * CHECKS WHETHER PROFILE EXISTS OR NOT
+       */
       const user = await query(`select uid from users WHERE uid = ${req.body.uid}`);
       // console.log(user.length)
       if (user.length) {
+        /**
+         * UPDATE THE DELETE STATUS OF THE PROFILE (SOFT DELETE).
+         */
         await query(`update users set delete_status = 1 where uid = ${req.body.uid}`);
         return res.status(201).json({ status: 1, message: "PROFILE_REMOVED" });
       }
@@ -72,16 +91,14 @@ const userProfile = {
     } catch (error) {
       return res.status(500).json({ status: 0, message: error.code })
     }
-
-
-
   },
 
+  /**
+   * TO GET ALL THE USERS WHO PROFILE IS NOT DELETED.
+   */
+
   async users(req, res, next) {
-    // let user_id = req.params.id;
-    // if (isNaN(user_id)) {
-    //   return res.status(400).json({ status: 0, message: "BAD_REQUEST" })
-    // }
+
     try {
       const result = await query(`select * from users where delete_status = 0`);
       // console.log(result.length)
@@ -95,6 +112,10 @@ const userProfile = {
       return res.status(500).json({ status: 0, message: error.code })
     }
   },
+
+  /**
+   * TO GET USER DETAILS BY THEIR ID.
+   */
 
   async user(req, res, next) {
     let user_id = req.params.id;
@@ -114,7 +135,6 @@ const userProfile = {
       return res.status(500).json({ status: 0, message: error.code })
     }
   }
-
 
 }
 
