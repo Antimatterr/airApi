@@ -17,7 +17,7 @@ const userProfile = {
       user data validation using JOI 
     */
     const profileSchema = Joi.object({
-      uid: Joi.number().required(),
+      uid: Joi.string().required(),
       username: Joi.string().min(3).max(50).required(),
       role: Joi.string().min(3).max(30).required(),
       pin: Joi.number().required()
@@ -33,7 +33,7 @@ const userProfile = {
       /*
        CHECK WHETHER GIVEN USERID ALREADY EXISTS IN DATABASE OR NOT. 
       */
-      const user = await query(`select uid from users WHERE uid = ${req.body.uid}`);
+      const user = await query(`select uid from users WHERE uid = '${req.body.uid}'`);
       // console.log(user.length)
       if (!user.length) {
         /* 
@@ -62,7 +62,7 @@ const userProfile = {
   */
   async removeProfile(req, res, next) {
     const removeSchema = Joi.object({
-      uid: Joi.number().required()
+      uid: Joi.string().required()
     });
 
     const { error } = removeSchema.validate();
@@ -76,13 +76,13 @@ const userProfile = {
       /**
        * CHECKS WHETHER PROFILE EXISTS OR NOT
        */
-      const user = await query(`select uid from users WHERE uid = ${req.body.uid}`);
+      const user = await query(`select uid from users WHERE uid = '${req.body.uid}'`);
       // console.log(user.length)
       if (user.length) {
         /** 
          * UPDATE THE DELETE STATUS OF THE PROFILE (SOFT DELETE).
          */
-        await query(`update users set delete_status = 1 where uid = ${req.body.uid}`);
+        await query(`update users set delete_status = 1 where uid = '${req.body.uid}'`);
         return res.status(201).json({ status: 1, message: "PROFILE_REMOVED" });
       }
       else {
@@ -119,11 +119,12 @@ const userProfile = {
 
   async user(req, res, next) {
     let user_id = req.params.id;
-    if (isNaN(user_id)) {
-      return res.status(400).json({ status: 0, message: "BAD_REQUEST" })
-    }
+    // if (isNaN(user_id)) {
+    //   return res.status(400).json({ status: 0, message: "BAD_REQUEST" })
+    // }
+    console.log(user_id);
     try {
-      const result = await query(`select * from users where delete_status = 0 and uid=${user_id}`);
+      const result = await query(`select * from users where delete_status = 0 and uid = '${user_id}' `);
       // console.log(result.length)
       if (result.length) {
         return res.status(200).json({ status: 1, result });
